@@ -1,0 +1,13 @@
+#//server
+
+The server maintains a table with the IP addresses, port numbers,
+and nick-names of all the clients.
+
+#//client
+
+Every client should also maintain a local table with information about
+all the other clients (nick-name, ip, port number, online-status).
+
+Every client should update (overwrite) its local table when the server sends
+information about all the other clients
+(further detail on this in upcoming section).
