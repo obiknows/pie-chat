@@ -12,12 +12,23 @@ def server(port, prompt, intro):
     clients = {}
 
     # create the socket
-    host = '127.0.0.1'
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.bind( (host, int(port)) )
+    HOST = '127.0.0.1'
+    PORT =  int(port)
+
+    sock = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
+    sock.bind( ('',PORT) )
+    # sock.listen(5)
+
+    # start the prompt
     print ( intro )
-    print ( prompt + 'server is running at '+host+':'+port)
+    print ( prompt + 'server is listening at '+HOST+':'+port)
     print ( prompt )
+
+    while True:
+        # accept registrations
+        (data, clientIP) = sock.recvfrom(1024)
+        print prompt, "received message:", data
+        pass
 
 def determineMode(args):
     # if (-s) is passed, go into "server mode"
@@ -39,7 +50,6 @@ def main(argv):
         sys.exit('\n\tIncorrect Syntax: To start UChat, run `python UdpChat.py <-c|-s> <command-line arguments>`\n')
 
     # Setup the "shell" chat env.
-    intro = 'Welcome to UChat. Type help or ? to list commands.\n'
     prompt = '$>>> '
 
     if (mode[0] == 'client'):      # in client, mode.
