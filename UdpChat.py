@@ -1,10 +1,34 @@
 # UdpChat.py -> a UDP Chat application in python
 # written by sam nnodim (son2105)
-import sys, cmd, socket
+import sys, cmd, socket, json
 
 # THE CLIENT
-# def client(args, prompt, intro):
+def client(args, prompt, intro):
+    # create the client's table
+    clients = {}
 
+    # parse the args
+    NAME         = args[1]
+    SERV_IP      = args[2]
+    SERV_PORT    = int(args[3])
+    PORT         = args[4]
+
+    # create a socket
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    # register on the server
+    regsitration_form = {
+        'name': NAME,
+        'addr': sock.getsockname()[0],
+        'port': PORT,
+    }
+    message = json.dumps(regsitration_form)
+
+    print (message)
+    sent = sock.sendto(message, (SERV_IP, SERV_PORT))
+    # (data, server) = sock.recvfrom(4096)
+
+    sock.close()
 
 # THE SERVER
 def server(port, prompt, intro):
@@ -26,7 +50,7 @@ def server(port, prompt, intro):
 
     while True:
         # accept registrations
-        (data, clientIP) = sock.recvfrom(1024)
+        (data, clientIP) = sock.recvfrom(4096)
         print prompt, "received message:", data
         pass
 
