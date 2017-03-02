@@ -1,6 +1,7 @@
 # UdpChat.py -> a UDP Chat application in python
 # written by sam nnodim (son2105)
 import sys, cmd, socket, json
+import pprint as pp
 
 # THE CLIENT
 def client(args, prompt, intro):
@@ -46,13 +47,18 @@ def server(port, prompt, intro):
     # start the prompt
     print ( intro )
     print ( prompt + 'server is listening at '+HOST+':'+port)
-    print ( prompt )
 
     while True:
         # accept registrations
-        (data, clientIP) = sock.recvfrom(4096)
-        print prompt, "received message:", data
+        (payload, clientIP) = sock.recvfrom(4096)
+        # print the recieved message
+        print prompt, "received message:", payload, ' from: ', clientIP
+        data = json.loads(payload)
+        print data['addr']
+
+        # print data['name']
         pass
+
 
 def determineMode(args):
     # if (-s) is passed, go into "server mode"
@@ -80,7 +86,6 @@ def main(argv):
         client(mode, prompt, 'Welcome to UChat.\n')
     else:                          # in server, mode.
         server(mode[1], prompt, 'Welcome to UChat Server.\n')
-
 
 # run the program
 if __name__ == '__main__':
